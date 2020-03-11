@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.3/flatly/bootstrap.min.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
     crossorigin="anonymous">
-  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/styles.css" />
 </head>
 
 <body>
@@ -36,7 +36,60 @@
     </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="/assets/js/index.js"></script>
+  <script src="assets/js/index.js"></script>
+  <script>
+    $(".save-note").on("click", () => {
+      const newNote = {
+        title: $(".note-title").val().trim(),
+        text: $(".note-textarea").val().trim()
+      }
+
+      $.post("/api/notes", newNote)
+        .then(data => {
+          console.log(data);
+
+          alert("Note saved!");
+          loadNotes();
+
+          $(".note-title").val("");
+          $(".note-textarea").val("");
+        })
+    });
+
+    const loadNotes = () => {
+      $(".list-group").empty();
+
+      const notes = $.get("/api/notes").then(data => {
+        console.log(data);
+
+        for(const note of data){
+          const listItem = $("<div>");
+          const header = $("<h1>").text(note.title);
+          const text = $("<p>").text(note.text)
+          const del = $("<i>").attr("class", "fas fa-trash");
+          del.attr("data-id", note.id);
+
+          header.append(del);
+          listItem.append(header);
+          listItem.append(text);
+          $(".list-group").append(listItem);
+        }
+      })
+    };
+
+    loadNotes();
+
+    document.querySelector(".list-group").addEventListener("click", event => {
+      if(event.target.matches("i")){
+        console.log(event.target.getAttribute("data-id"));
+        $.post(`/api/notes/${event.target.getAttribute("data-id")}`)
+        .then(data => {
+          console.log(data);
+          loadNotes();
+        });
+      }
+    });
+  </script>
 </body>
 
 </html>
