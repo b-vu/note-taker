@@ -8,6 +8,7 @@ const writefileAsync = util.promisify(fs.writeFile);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -23,7 +24,7 @@ else{
 
 //Get Routes
 app.get("/notes", (req, res) => {
-    res.sendFile(path.join(__dirname, "notes.html"));
+    res.sendFile(path.join(__dirname, "/public/notes.html"));
 })
 
 app.get("/api/notes", (req, res) => {
@@ -31,7 +32,7 @@ app.get("/api/notes", (req, res) => {
 })
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
+    res.sendFile(path.join(__dirname, "/public/index.html"));
 })
 
 //Post Routes

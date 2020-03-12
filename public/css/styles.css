@@ -4,6 +4,10 @@ html, body {
   padding: 0;
 }
 
+h1:hover {
+  cursor: pointer;
+}
+
 .save-note {
   display: none;
 }
