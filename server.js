@@ -35,7 +35,7 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/index.html"));
 })
 
-//Post Routes
+//Post Route
 app.post("/api/notes", (req, res) => {
     const note = req.body;
     counter++;
@@ -46,7 +46,8 @@ app.post("/api/notes", (req, res) => {
     .then(res.json(notes));
 })
 
-app.post("/api/notes/:id", (req, res) => {
+//Delete Route
+app.delete("/api/notes/:id", (req, res) => {
     const id = parseInt(req.params.id);
     console.log(id);
     for(let i = 0; i < notes.length; i++){

@@ -63,7 +63,8 @@ loadNotes();
 
 document.querySelector(".list-group").addEventListener("click", event => {
   if(event.target.matches("i")){
-    $.post(`/api/notes/${event.target.getAttribute("data-id")}`)
+    $.ajax({url: `/api/notes/${event.target.getAttribute("data-id")}`,
+            method: "DELETE"})
     .then(data => {
       console.log(data);
       loadNotes();
